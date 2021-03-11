@@ -1,11 +1,13 @@
 import os
 import pymongo
-if os.path.exists("env.py"):
+if os.path.exists("env.py"): # Checks for sensitive info stored in env.py
     import env
 
 MONGO_URI = os.environ.get("MONGO_URI")
 DATABASE = "myFirstDB"
 COLLECTION = "celebrities"
+
+# Function to grab db data from MongoDB
 
 def mongo_connect(url):
     try:
@@ -14,6 +16,7 @@ def mongo_connect(url):
     except pymongo.errors.ConnectionFailure as e:
         print("Couldn't connect to MongoDB: %s") % e
 
+# Menu options that show in the terminal
 
 def show_menu():
     print("")
@@ -26,6 +29,7 @@ def show_menu():
     option = input("Enter option: ") # ask user to choos an option
     return option
 
+# Input prompts to a user when searching a record
 
 def get_record():
     print("")
@@ -43,7 +47,7 @@ def get_record():
 
     return doc
 
-
+# Add a record
 
 def add_record():
     print("")
@@ -72,6 +76,7 @@ def add_record():
     except:
         print("Error accessing the database")
 
+# Find a record
 
 def find_record():
     doc = get_record()
@@ -81,6 +86,7 @@ def find_record():
             if k != "_id":  # if key isn't = to the id (we want to keep that hidden)
                 print(k.capitalize() + ": " + v.capitalize())  # print the key val pairs in capitalized
 
+# Edit a record
 
 def edit_record():
     doc = get_record()
@@ -89,10 +95,10 @@ def edit_record():
         print("")
         for k, v in doc.items():
             if k != "_id":
-                update_doc[k] = input(k.capitalize() + " [" + v + "] > ")
+                update_doc[k] = input(k.capitalize() + " [" + v + "] > ") # keys's value will be changed to input after the > 
 
-                if update_doc[k] == "":
-                    update_doc[k] = v
+                if update_doc[k] == "": # if no changes are made to key
+                    update_doc[k] = v   # value stays the same
 
         try:
             coll.update_one(doc, {"$set": update_doc})
@@ -101,6 +107,7 @@ def edit_record():
         except:
             print("Error accessing the database")
 
+# Delete a record
 
 def delete_record():
     doc = get_record()
@@ -123,6 +130,7 @@ def delete_record():
         else:
             print("Document not deleted")
 
+# Main loop to show in terminal
 
 def main_loop():
     while True:
@@ -142,6 +150,7 @@ def main_loop():
             print("Invalid option")
         print("")
 
+# Variables that get url, db and db's content + runs the loop function
 
 conn = mongo_connect(MONGO_URI)
 coll = conn[DATABASE][COLLECTION]

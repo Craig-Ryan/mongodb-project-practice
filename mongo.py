@@ -7,6 +7,8 @@ MONGO_URI = os.environ.get("MONGO_URI")
 DATABASE = "myFirstDB"
 COLLECTION = "celebrities"
 
+# Function to grab db data from MongoDB
+
 def mongo_connect(url):
     try:
         conn = pymongo.MongoClient(url)
